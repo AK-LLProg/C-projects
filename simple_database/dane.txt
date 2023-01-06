@@ -1,0 +1,10 @@
+King_Stephen Cztery_Pory_Roku Albatros 512 Nowela-zbior
+Sapkowski_Andrzej Krew_Elfow SuperNOWA 296 Powiesc
+Prus_Boleslaw Lalka Znak 928 Powiesc
+Mickiewicz_Adam Ballady_i_Romanse GREG 96 Ballada_zbior
+Puzo_Mario Ojciec_Chrzestny Czytelnik 590 Powiesc
+Shakespeare_William Hamlet Zielona_Sowa 168 Tragedia
+Sienkiewicz_Henryk Janko_Muzykant Varsovia 15 Nowela
+Dickens_Charles Oliver_Twist Czytelnik 515 Powiesc
+Slowacki_Juliusz Kordian Siedmiorog 120 Dramat_romantyczny
+Fredro_Aleksander Zemsta Universitas 190 Komedia
