@@ -8,7 +8,7 @@
         "name": "(gdb) Launch",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+        "program": "${fileDirname}\\base.exe",
         "args": [],//["data.txt", "data_cp.txt"] ,//[], 
         "stopAtEntry": false,
         "cwd": "${fileDirname}",
@@ -16,7 +16,7 @@
         "externalConsole": true,
         "MIMode": "gdb",
         "miDebuggerPath": "C:\\MinGw\\Bin\\gdb.exe",
-        "preLaunchTask": "build",
+        "preLaunchTask": "make",
         "setupCommands": [
             {
                 "description": "Włącz formatowanie kodu dla gdb",

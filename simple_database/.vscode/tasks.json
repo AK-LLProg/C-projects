@@ -36,6 +36,15 @@
                 "isDefault": true
             },
             "detail": "Zadanie wygenerowane przez debuger."
-        }
+        },
+        {
+            "label": "make",
+            "type": "shell",
+            "command": "mingw32-make",
+            "args": [
+            ],
+            "group": "build",
+            "problemMatcher": []
+        },
     ]
 }

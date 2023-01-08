@@ -1,38 +1,41 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
+#include "inc/sorting.h"
 #define LENGTH 50
 #define record_len 31
+#define record_len_no_null_terminator 30
 #define page_count 10
+#define page_count_no_null_terminator 9
 //glowna struktura elementu
-struct rekord
+typedef struct rekord
 {
-	char autor[31];
-	char tytul[31];
-	char wydawnictwo[31];
-	char l_str[10];
-	char gatunek[31];
-};
+	char autor[record_len];
+	char tytul[record_len];
+	char wydawnictwo[record_len];
+	char l_str[page_count];
+	char gatunek[record_len];
+}rekord;
 
 int sortuj_autor(const void *x, const void *y);
 int sortuj_tytul(const void *x, const void *y);
 FILE *fp;
 FILE *pp;
 errno_t err;
-struct rekord r[LENGTH];//maksymalna liczba rekordow
+rekord r[LENGTH];//maksymalna liczba rekordow
 int l_rekordow = 0 ;
 int main(void)
 {
-	
 	int a;
 	int b[4];
-	for (int index = 0; index < sizeof(b)/sizeof(b[0]); ++index)
+	for (int index = 0; index < sizeof(b)/sizeof(*b); ++index)
 	{
 		b[index] = -1;
 	}
-	char wyszukanie[30];
-	char temp[30];
-	char modyfikacja[30];
+	char wyszukanie[record_len_no_null_terminator];
+	char temp[record_len_no_null_terminator];
+	char modyfikacja[record_len_no_null_terminator];
 	int k = -2;
 	int m = -3;
 	int sort;
@@ -60,11 +63,11 @@ int main(void)
 				printf("Posiadane rekordy\n	Nazwisko i imie autora\t\t         Tytul\t       Wydawnictwo\tLiczba stron\t   Gatunek literacki\n");
 				for (int index = 0; index < l_rekordow; ++index)
 				{
-					fscanf_s(fp, "%s", r[index].autor, 30);
-					fscanf_s(fp, "%s", r[index].tytul, 30);
-					fscanf_s(fp, "%s", r[index].wydawnictwo, 30);
-					fscanf_s(fp, "%s", r[index].l_str, 9);
-					fscanf_s(fp, "%s", r[index].gatunek, 30);
+					fscanf_s(fp, "%s", r[index].autor, record_len_no_null_terminator);
+					fscanf_s(fp, "%s", r[index].tytul, record_len_no_null_terminator);
+					fscanf_s(fp, "%s", r[index].wydawnictwo, record_len_no_null_terminator);
+					fscanf_s(fp, "%s", r[index].l_str, page_count_no_null_terminator);
+					fscanf_s(fp, "%s", r[index].gatunek, record_len_no_null_terminator);
 				} 
 				for (int index = 0; index < l_rekordow; ++index)
 				{
@@ -81,10 +84,11 @@ int main(void)
 			printf("\n");
 			printf("1. sortuj wg. nazwiska autora\n");
 			printf("2. sortowanie wg. tytulu utworu\n");
+			printf("Wcisnij dowolny klawisz by wrocic do wyboru funkcji\t");
 			scanf_s("%d", &sort);
 			if (sort == 1)
 			{
-				qsort(r, l_rekordow, sizeof(struct rekord), sortuj_autor);
+				qsort(r, l_rekordow, sizeof(rekord), sortuj_autor);
 				for (int index = 0; index < l_rekordow; ++index)
 				{
 					printf("%30s\t", r[index].autor);
@@ -102,7 +106,7 @@ int main(void)
 			}
 			else if(sort == 2)
 			{
-				qsort(r, l_rekordow, sizeof(struct rekord), sortuj_tytul);
+				qsort(r, l_rekordow, sizeof(rekord), sortuj_tytul);
 				for (int i = 0; i < l_rekordow; ++i)
 				{
 					printf("%30s\t", r[i].autor);
@@ -129,7 +133,6 @@ int main(void)
 			}	
 			break;
 		case 2:
-		
 			err = fopen_s(&pp, "porzadkowa.txt", "r");
 			if (err == 0)
 			{
@@ -143,15 +146,15 @@ int main(void)
 			{
 				printf("Uwaga! przy wprowadzaniu danych zastap znak spacji przez _\n");
 				printf("podaj autora	");
-				scanf_s("%s", r[l_rekordow].autor, 30);
+				scanf_s("%s", r[l_rekordow].autor, record_len_no_null_terminator);
 				printf("podaj tytul		");
-				scanf_s("%s", r[l_rekordow].tytul, 30);
+				scanf_s("%s", r[l_rekordow].tytul, record_len_no_null_terminator);
 				printf("podaj wydawnictwo	");
-				scanf_s("%s", r[l_rekordow].wydawnictwo, 30);
+				scanf_s("%s", r[l_rekordow].wydawnictwo, record_len_no_null_terminator);
 				printf("podaj liczbe stron	");
-				scanf_s("%s", r[l_rekordow].l_str, 9);
+				scanf_s("%s", r[l_rekordow].l_str, page_count_no_null_terminator);
 				printf("podaj gatunek	");
-				scanf_s("%s", r[l_rekordow].gatunek, 30);
+				scanf_s("%s", r[l_rekordow].gatunek, record_len_no_null_terminator);
 				fprintf(fp, "%s %s %s %s %s\n", r[l_rekordow].autor, r[l_rekordow].tytul, r[l_rekordow].wydawnictwo, r[l_rekordow].l_str, r[l_rekordow].gatunek);
 				l_rekordow++;
 				fclose(fp);
@@ -187,11 +190,11 @@ int main(void)
 			{
 				for (int i = 0; i < l_rekordow; ++i)
 				{
-					fscanf_s(fp, "%s", r[i].autor, 30);
-					fscanf_s(fp, "%s", r[i].tytul, 30);
-					fscanf_s(fp, "%s", r[i].wydawnictwo, 30);
-					fscanf_s(fp, "%s", r[i].l_str, 9);
-					fscanf_s(fp, "%s", r[i].gatunek, 30);
+					fscanf_s(fp, "%s", r[i].autor, record_len_no_null_terminator);
+					fscanf_s(fp, "%s", r[i].tytul, record_len_no_null_terminator);
+					fscanf_s(fp, "%s", r[i].wydawnictwo, record_len_no_null_terminator);
+					fscanf_s(fp, "%s", r[i].l_str, page_count_no_null_terminator);
+					fscanf_s(fp, "%s", r[i].gatunek, record_len_no_null_terminator);
 				}
 				fclose(fp);
 			}
@@ -201,7 +204,7 @@ int main(void)
 			}
 			printf("Uwaga! Przy wprowadzaniu danych zastap znak spacji przez _\n Wyszukanie autora tylko przez podanie pelnego nazwiska i imienia\n");
 			printf("Podaj wyraz do wyszukania:	");
-			scanf_s("%s", &wyszukanie, 30);
+			scanf_s("%s", &wyszukanie, record_len_no_null_terminator);
 			for (int i = 0; i < l_rekordow; ++i)
 			{
 				if (strcmp(r[i].autor, wyszukanie) == 0)
@@ -295,16 +298,16 @@ int main(void)
 			{
 				for (int i = 0; i < l_rekordow; ++i)
 				{
-					fscanf_s(fp, "%s", r[i].autor, 30);
-					fscanf_s(fp, "%s", r[i].tytul, 30);
-					fscanf_s(fp, "%s", r[i].wydawnictwo, 30);
-					fscanf_s(fp, "%s", r[i].l_str, 9);
-					fscanf_s(fp, "%s", r[i].gatunek, 30);
+					fscanf_s(fp, "%s", r[i].autor, record_len_no_null_terminator);
+					fscanf_s(fp, "%s", r[i].tytul, record_len_no_null_terminator);
+					fscanf_s(fp, "%s", r[i].wydawnictwo, record_len_no_null_terminator);
+					fscanf_s(fp, "%s", r[i].l_str, page_count_no_null_terminator);
+					fscanf_s(fp, "%s", r[i].gatunek, record_len_no_null_terminator);
 				}
 				fclose(fp);
 			}
 			printf("Podaj tytul rekordu, ktory chcesz zmodyfikowac:\t");
-			scanf_s("%s", temp, 30);
+			scanf_s("%s", temp, record_len_no_null_terminator);
 			for (int i = 0; i < l_rekordow; ++i)
 			{
 				if (strcmp(r[i].tytul, temp) == 0)
@@ -333,7 +336,7 @@ int main(void)
 					if (err == 0)
 					{
 						printf("Podaj nowa wartosc\t");
-						scanf_s("%s", &modyfikacja, 30);
+						scanf_s("%s", &modyfikacja, record_len_no_null_terminator);
 						for (int i = 0; i < l_rekordow; ++i)
 						{
 							if (i == m)
@@ -352,7 +355,7 @@ int main(void)
 					if (err == 0)
 					{
 						printf("Podaj nowa wartosc\t");
-						scanf_s("%s", &modyfikacja, 30);
+						scanf_s("%s", &modyfikacja, record_len_no_null_terminator);
 						for (int i = 0; i < l_rekordow; ++i)
 						{
 							if (i == m)
@@ -370,7 +373,7 @@ int main(void)
 					if (err == 0)
 					{
 						printf("Podaj nowa wartosc\t");
-						scanf_s("%s", &modyfikacja, 30);
+						scanf_s("%s", &modyfikacja, record_len_no_null_terminator);
 						for (int i = 0; i < l_rekordow; ++i)
 						{
 							if (i == m)
@@ -389,7 +392,7 @@ int main(void)
 					if (err == 0)
 					{
 						printf("Podaj nowa wartosc\t");
-						scanf_s("%s", &modyfikacja, 30);
+						scanf_s("%s", &modyfikacja, record_len_no_null_terminator);
 						for (int i = 0; i < l_rekordow; ++i)
 						{
 							if (i == m)
@@ -408,7 +411,7 @@ int main(void)
 					if (err == 0)
 					{
 						printf("Podaj nowa wartosc\t");
-						scanf_s("%s", &modyfikacja, 30);
+						scanf_s("%s", &modyfikacja, record_len_no_null_terminator);
 						for (int i = 0; i < l_rekordow; ++i)
 						{
 							if (i == m)
@@ -446,17 +449,17 @@ int main(void)
 			{
 				for (int i = 0; i < l_rekordow; ++i)
 				{
-					fscanf_s(fp, "%s", r[i].autor, 30);
-					fscanf_s(fp, "%s", r[i].tytul, 30);
-					fscanf_s(fp, "%s", r[i].wydawnictwo, 30);
-					fscanf_s(fp, "%s", r[i].l_str, 9);
-					fscanf_s(fp, "%s", r[i].gatunek, 30);
+					fscanf_s(fp, "%s", r[i].autor, record_len_no_null_terminator);
+					fscanf_s(fp, "%s", r[i].tytul, record_len_no_null_terminator);
+					fscanf_s(fp, "%s", r[i].wydawnictwo, record_len_no_null_terminator);
+					fscanf_s(fp, "%s", r[i].l_str, page_count_no_null_terminator);
+					fscanf_s(fp, "%s", r[i].gatunek, record_len_no_null_terminator);
 				}
 				fclose(fp);
 			}
 
 			printf("Podaj tytul rekordu, ktory chcesz usunac:\t");
-			scanf_s("%s", temp, 30);
+			scanf_s("%s", temp, record_len_no_null_terminator);
 			for (int i = 0; i < l_rekordow; ++i)
 			{
 				if (strcmp(r[i].tytul, temp) == 0)
@@ -527,18 +530,4 @@ int main(void)
 
 	}
 	return 0;
-}
-
-int sortuj_autor(const void *x, const void *y) {
-
-	struct rekord const *pierwszy = x;
-	struct rekord const *drugi = y;
-	return strcmp((*pierwszy).autor, (*drugi).autor);
-}
-int sortuj_tytul(const void *x, const void *y)
-{
-	struct rekord const *pierwszy = x;
-	struct rekord const *drugi = y;
-	return strcmp((*pierwszy).tytul, (*drugi).tytul);
-
 }

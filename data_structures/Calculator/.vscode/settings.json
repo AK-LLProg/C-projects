@@ -3,6 +3,7 @@
     "files.associations": {
         "string.h": "c",
         "lib.h": "c",
-        "parsing.h": "c"
+        "parsing.h": "c",
+        "stdlib.h": "c"
     }
 }

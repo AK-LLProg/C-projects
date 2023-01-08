@@ -8,7 +8,11 @@
 void userParse(char* inpString)
 {
     printf("Podaj wyrazenie arytmetyczne, dozwolone znaki: + - * /: \n");
+    char c;
+    //while((c = getchar()) != '\n' && c != EOF)
+    fflush(stdin);
     fgets(inpString,str_len,stdin);
+
 }
 int characterCompare(char* inpString, int index)
 {
@@ -87,57 +91,48 @@ int parsingIsValid(char *inpString) // funckja zwraca 0 jesli dane są w dobrej 
             }
         }
         index2 = index + 1;
-    }
-    else if (openBracket(inpString, index))
-    {
-        int index3 = index+1;
+    } else if (openBracket(inpString, index)) {
+        int index3 = index + 1;
         int index4 = index3;
         int length3 = 0;
-        while (index3 < length-1)
-        {
-            if (closedBracket(inpString, index3))
-            {
+        while (index3 < length - 1) {
+            if (closedBracket(inpString, index3)) {
                 length3 = index3 - index4;
                 break;
             }
             index3++;
         }
-        if (length3==0)
-        {
+        if (length3 == 0) {
             printf("Invalid data\n");
             return -1;
         }
         index3 = index4;
         int start_value = index3;
-        while (index3 < length3+start_value)
-        {
-            if (index3 == index+1 && characterCompare(inpString, index3)) // pierwszy znak po (, sytuacja (- jest dopuszczalna, inne nie
+        while (index3 < length3 + start_value) {
+            if (index3 == index + 1 &&
+                characterCompare(inpString,
+                                 index3))   // pierwszy znak po (, sytuacja (-
+                                            // jest dopuszczalna, inne nie
             {
-                if (*(inpString + index3)=='-')
-                {
-                    if (isdigit(*(inpString + index3+1)) == 0) // sytuacja: dwa minusy obok siebie
+                if (*(inpString + index3) == '-') {
+                    if (isdigit(*(inpString + index3 + 1)) ==
+                        0)   // sytuacja: dwa minusy obok siebie
                     {
                         printf("Invalid data\n");
                         return -1;
+                    } else {
+                        ++index3;
+                        continue;
                     }
-                    else{
-                    ++index3;
-                    continue;
-                    }
+                } else {
+                    printf("Invalid data\n");
+                    return -1;
                 }
-                else {
-                printf("Invalid data\n");
-                return -1;
-                }
-            }
-            else if (characterCompare(inpString, index3))
-            {
-                for (; index4 < index3; ++index4)
-                {
+            } else if (characterCompare(inpString, index3)) {
+                for (; index4 < index3; ++index4) {
                     if (isdigit(*(inpString + index4)) != 0)
                         continue;
-                    else
-                    {
+                    else {
                         printf("Invalid data\n");
                         return -1;
                     }
@@ -146,8 +141,7 @@ int parsingIsValid(char *inpString) // funckja zwraca 0 jesli dane są w dobrej 
             }
             ++index3;
         }
-        if (index4 == index3)
-        {
+        if (index4 == index3) {
             printf("Invalid data\n");
             return -1;
         }
